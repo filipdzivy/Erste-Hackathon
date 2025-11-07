@@ -1,0 +1,34 @@
+:root {
+  --ss-blue: #0063AF;
+  --ss-light-blue: #4A9FE7;
+  --ss-dark-blue: #004477;
+  --ss-yellow: #FFD500;
+  --ss-white: #FFFFFF;
+  --ss-gray: #F5F5F5;
+  --ss-dark-gray: #333333;
+  --ss-border: #E0E0E0;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
