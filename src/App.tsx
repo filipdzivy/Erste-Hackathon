@@ -61,17 +61,6 @@ function App() {
 
         <div className="right-section">
           <Tamagotchi health={tamagotchiHealth} totalSpending={totalSpending} />
-          <div className="stats-card">
-            <h3>Prehľad</h3>
-            <div className="stat-item">
-              <span>Celkové výdavky:</span>
-              <span className="stat-value">€{totalSpending.toFixed(2)}</span>
-            </div>
-            <div className="stat-item">
-              <span>Počet účteniek:</span>
-              <span className="stat-value">{receipts.length}</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -1,116 +1,94 @@
-import { useEffect, useState } from 'react'
-import './Tamagotchi.css'
+// src/components/Tamagotchi.tsx
+import React from "react";
+import "./Tamagotchi.css";
 
-interface Props {
-  health: number
-  totalSpending: number
+// Import sprites from assets folder
+import cryingSprite from '../assets/tamagotchi-crying.png';
+import defaultSprite from '../assets/tamagotchi-default.png';
+import eatingSprite from '../assets/tamagotchi-eating.png';
+import happySprite from '../assets/tamagotchi-happy.png';
+import sadSprite from '../assets/tamagotchi-sad.png';
+
+interface TamagotchiProps {
+  health: number;
+  totalSpending: number;
 }
 
-const Tamagotchi = ({ health, totalSpending }: Props) => {
-  const [mood, setMood] = useState<'happy' | 'neutral' | 'sad' | 'sick'>('happy')
-  const [isAnimating, setIsAnimating] = useState(false)
+const StatBar: React.FC<{
+  label: string;
+  value: number;
+  ariaLabel?: string;
+  fillClass?: string;
+}> = ({ label, value, ariaLabel, fillClass = "" }) => {
+  const pct = Math.max(0, Math.min(100, Math.round(value)));
+  return (
+    <div className="stat-row" aria-label={ariaLabel ?? label}>
+      <div className="stat-label">{label}</div>
+      <div className="stat-track">
+        <div
+          className={`stat-fill ${fillClass}`}
+          style={{ width: `${pct}%` }}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={pct}
+        />
+      </div>
+    </div>
+  );
+};
 
-  useEffect(() => {
-    if (health >= 70) {
-      setMood('happy')
-    } else if (health >= 40) {
-      setMood('neutral')
-    } else if (health >= 20) {
-      setMood('sad')
+const Tamagotchi: React.FC<TamagotchiProps> = ({ health, totalSpending }) => {
+  const happiness = Math.max(0, Math.min(100, 80 - totalSpending * 0.5 + (health - 50) * 0.2));
+
+  const MONTHLY_TARGET = 500;
+  const budgetRemainingPct = Math.max(0, Math.min(100, ((MONTHLY_TARGET - totalSpending) / MONTHLY_TARGET) * 100));
+
+  // Determine which sprite to show based on health and happiness
+  const getSpriteImage = () => {
+    if (health < 30 || happiness < 30) {
+      return { src: cryingSprite, frames: 4 }; // Very low stats - crying
+    } else if (health < 50 || happiness < 50) {
+      return { src: sadSprite, frames: 13 }; // Low stats - sad
+    } else if (health > 80 && happiness > 80) {
+      return { src: happySprite, frames: 4 }; // High stats - happy
+    } else if (totalSpending > MONTHLY_TARGET * 0.7) {
+      return { src: eatingSprite, frames: 16 }; // High spending - eating
     } else {
-      setMood('sick')
+      return { src: defaultSprite, frames: 10 }; // Normal - default
     }
+  };
 
-    // Trigger animation on health change
-    setIsAnimating(true)
-    setTimeout(() => setIsAnimating(false), 500)
-  }, [health])
-
-  const getMoodEmoji = () => {
-    switch (mood) {
-      case 'happy': return '😊'
-      case 'neutral': return '😐'
-      case 'sad': return '😟'
-      case 'sick': return '😷'
-    }
-  }
-
-  const getMoodMessage = () => {
-    switch (mood) {
-      case 'happy': return 'Som šťastný! Dobre spravuješ svoj rozpočet! 🎉'
-      case 'neutral': return 'Cítim sa OK. Dávaj pozor na výdavky.'
-      case 'sad': return 'Je mi smutno... Veľa míňaš. 😢'
-      case 'sick': return 'Potrebujem pomoc! Príliš veľa výdavkov! 🆘'
-    }
-  }
-
-  const getHealthColor = () => {
-    if (health >= 70) return '#4CAF50'
-    if (health >= 40) return '#FFC107'
-    if (health >= 20) return '#FF9800'
-    return '#F44336'
-  }
+  const spriteData = getSpriteImage();
+  
+  // Determine the CSS class based on frame count
+  const getFrameClass = (frames: number) => {
+    if (frames === 4) return 'frames-4';
+    if (frames === 13) return 'frames-13';
+    if (frames === 16) return 'frames-16';
+    return ''; // default is 10 frames
+  };
 
   return (
     <div className="card tamagotchi-card">
-      <h3>
-        <span>🎮</span>
-        Váš finančný kamarát
-      </h3>
-      
-      <div className="tamagotchi-container">
-        <div className={`tamagotchi ${mood} ${isAnimating ? 'bounce' : ''}`}>
-          <div className="tamagotchi-body">
-            <div className="tamagotchi-face">{getMoodEmoji()}</div>
-            <div className="tamagotchi-arms">
-              <span className="arm-left">🤚</span>
-              <span className="arm-right">🤚</span>
-            </div>
-          </div>
+      <div className="tamagotchi-top">
+        <div className="tamagotchi-avatar">
+          <img 
+            src={spriteData.src} 
+            alt="Tamagotchi sprite" 
+            className={`tamagotchi-sprite ${getFrameClass(spriteData.frames)}`}
+          />
         </div>
+        <div className="tamagotchi-title">Tamagotchi</div>
+      </div>
 
-        <div className="health-bar-container">
-          <div className="health-label">
-            <span>Zdravie</span>
-            <span className="health-value">{health}%</span>
-          </div>
-          <div className="health-bar">
-            <div 
-              className="health-fill" 
-              style={{ 
-                width: `${health}%`,
-                backgroundColor: getHealthColor()
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="mood-message">
-          <p>{getMoodMessage()}</p>
-        </div>
-
-        <div className="tamagotchi-stats">
-          <div className="stat">
-            <span className="stat-icon">💰</span>
-            <div>
-              <div className="stat-label">Celkové výdavky</div>
-              <div className="stat-number">€{totalSpending.toFixed(2)}</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="tips-section">
-          <h4>💡 Tipy na zlepšenie</h4>
-          <ul className="tips-list">
-            {health < 50 && <li>Obmedz nákupy nad €50</li>}
-            {health < 70 && <li>Skús nakupovať na akciách</li>}
-            {health < 30 && <li>Nastav si denný limit!</li>}
-            {health >= 70 && <li>Výborne! Pokračuj tak ďalej! 🌟</li>}
-          </ul>
-        </div>
+      <div className="tamagotchi-stats">
+        <StatBar label="Zdravie / HP" value={health} fillClass="fill-green" />
+        <StatBar label="Šťastie" value={happiness} fillClass="fill-red" />
+        <StatBar label="Mesačný rozpočet" value={budgetRemainingPct} fillClass="fill-white" />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Tamagotchi
+export default Tamagotchi;
