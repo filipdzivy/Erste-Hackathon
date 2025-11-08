@@ -209,23 +209,28 @@ function App() {
       </header>
 
       <div className="main-container">
-        <div className="left-section">
-          <ReceiptUpload onReceiptUpload={handleReceiptUpload} />
-          <ReceiptList receipts={receipts} />
+        <div className="top-grid">
+          <div className="left-section">
+            <ReceiptUpload onReceiptUpload={handleReceiptUpload} />
+            <ReceiptList receipts={receipts} />
+          </div>
+
+          <div className="middle-section">
+            <ChatBot receipts={receipts} />
+          </div>
+
+          <div className="right-section">
+            <Tamagotchi 
+              health={health} 
+              happiness={happiness}
+              pocketMoney={pocketMoneyRemaining}
+              pocketMoneyPercentage={pocketMoneyPercentage}
+              totalPocketMoney={POCKET_MONEY}
+            />
+          </div>
         </div>
 
-        <div className="middle-section">
-          <ChatBot receipts={receipts} />
-        </div>
-
-        <div className="right-section">
-          <Tamagotchi 
-            health={health} 
-            happiness={happiness}
-            pocketMoney={pocketMoneyRemaining}
-            pocketMoneyPercentage={pocketMoneyPercentage}
-            totalPocketMoney={POCKET_MONEY}
-          />
+        <div className="piggy-bank-section">
           <PiggyBank 
             balance={piggyBank}
             availableMoney={pocketMoneyRemaining}

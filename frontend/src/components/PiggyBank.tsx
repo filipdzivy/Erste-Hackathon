@@ -46,123 +46,112 @@ const PiggyBank = ({ balance, availableMoney, totalPocketMoney, onAddMoney }: Pi
   return (
     <div className="card piggy-bank">
       <h2>
-        <span>🐷</span>
-        Kasička
+        Pokladnička
       </h2>
 
-      <div className="piggy-bank-display">
-        <div className="piggy-icon">💰</div>
-        <div className="piggy-balance">
-          <div className="balance-label">Naspárené:</div>
-          <div className="balance-amount">€{balance.toFixed(2)}</div>
-          <div className="balance-percentage">{savingsPercentage.toFixed(0)}% z vreckového</div>
+      <div className="piggy-bank-content">
+        {/* Icon and Display */}
+        <div className="piggy-display-section">
+          <div className="piggy-icon">💰</div>
+          <div className="piggy-balance">
+            <div className="balance-label">Našporené:</div>
+            <div className="balance-amount">€{balance.toFixed(2)}</div>
+            <div className="balance-percentage">{savingsPercentage.toFixed(0)}% z vreckového</div>
+          </div>
         </div>
-      </div>
 
-      <div className="pocket-money-info">
-        <div className="info-row">
-          <span>Zostáva z vreckového:</span>
-          <strong className="remaining-amount">€{availableMoney.toFixed(2)}</strong>
+        {/* Info Items */}
+        <div className="piggy-info-section">
+          <div className="info-item">
+            <span className="info-label">Zostáva z vreckového:</span>
+            <strong className="info-value remaining-amount">€{availableMoney.toFixed(2)}</strong>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Minuté na nákupy:</span>
+            <strong className="info-value spent-amount">€{spentMoney.toFixed(2)}</strong>
+          </div>
+          <div className="info-item">
+            <span className="info-label">V pokladničke:</span>
+            <strong className="info-value saved-amount">€{balance.toFixed(2)}</strong>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Môžeš minúť/ušetriť:</span>
+            <strong className="info-value available-amount">€{availableMoney.toFixed(2)}</strong>
+          </div>
         </div>
-        <div className="info-row">
-          <span>Minuté na nákupy:</span>
-          <strong className="spent-amount">€{spentMoney.toFixed(2)}</strong>
-        </div>
-        <div className="info-row">
-          <span>V kasičke:</span>
-          <strong className="saved-amount">€{balance.toFixed(2)}</strong>
-        </div>
-        <div className="info-row highlight">
-          <span>Môžeš minúť/ušetriť:</span>
-          <strong className="available-amount">€{availableMoney.toFixed(2)}</strong>
-        </div>
-      </div>
 
-      {availableMoney <= 0 && (
-        <div className="warning-message">
-          ⚠️ Nemáš žiadne voľné vreckové!
-        </div>
-      )}
-
-      {!isAdding ? (
-        <button 
-          className="button button-primary"
-          onClick={() => setIsAdding(true)}
-          disabled={availableMoney <= 0}
-        >
-          <span>➕</span>
-          {availableMoney > 0 ? 'Pridať do kasičky' : 'Niet voľných peňazí'}
-        </button>
-      ) : (
-        <div className="add-money-form">
-          {quickAmounts.length > 0 && (
-            <div className="quick-amounts">
-              <p>Rýchle sumy:</p>
-              <div className="quick-buttons">
-                {quickAmounts.map(amount => (
-                  <button
-                    key={amount}
-                    className="button button-small"
-                    onClick={() => setInputAmount(amount.toString())}
-                  >
-                    €{amount}
-                  </button>
-                ))}
-              </div>
+        {/* Action Button */}
+        <div className="piggy-action-section">
+          {availableMoney <= 0 && (
+            <div className="warning-message">
+              ⚠️ Nemáš žiadne voľné vreckové!
             </div>
           )}
 
-          <div className="input-group">
-            <input
-              type="number"
-              className="money-input"
-              placeholder="Zadajte sumu"
-              value={inputAmount}
-              onChange={(e) => setInputAmount(e.target.value)}
-              min="0"
-              step="0.01"
-              max={availableMoney}
-            />
-            <span className="currency">€</span>
-          </div>
-
-          <div className="button-group">
+          {!isAdding ? (
             <button 
               className="button button-primary"
-              onClick={handleAddMoney}
-              disabled={!inputAmount || parseFloat(inputAmount) <= 0}
+              onClick={() => setIsAdding(true)}
+              disabled={availableMoney <= 0}
             >
-              ✓ Uložiť
+              <span>➕</span>
+              Pridať do pokladničky
             </button>
-            <button 
-              className="button button-secondary"
-              onClick={() => {
-                setIsAdding(false)
-                setInputAmount('')
-              }}
-            >
-              Zrušiť
-            </button>
-          </div>
-        </div>
-      )}
+          ) : (
+            <div className="add-money-form">
+              {quickAmounts.length > 0 && (
+                <div className="quick-amounts">
+                  <p>Rýchle sumy:</p>
+                  <div className="quick-buttons">
+                    {quickAmounts.map(amount => (
+                      <button
+                        key={amount}
+                        className="button button-small"
+                        onClick={() => setInputAmount(amount.toString())}
+                      >
+                        €{amount}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-      <div className="savings-tips">
-        <p className="tip-title">💡 Tip:</p>
-        <p className="tip-text">
-          {balance === 0 && "Začni šetriť! Aj malá suma je dobrý začiatok."}
-          {balance > 0 && balance < 10 && "Skvelý začiatok! Pokračuj ďalej!"}
-          {balance >= 10 && balance < 25 && "Výborne! Už máš slušnú sumu!"}
-          {balance >= 25 && balance < 40 && "Wow! Viac ako polovica vreckového ušetrená!"}
-          {balance >= 40 && "Fantastické! Si majster šetrenia! 🎉"}
-        </p>
+              <div className="input-group">
+                <input
+                  type="number"
+                  className="money-input"
+                  placeholder="Zadajte sumu"
+                  value={inputAmount}
+                  onChange={(e) => setInputAmount(e.target.value)}
+                  min="0"
+                  step="0.01"
+                  max={availableMoney}
+                />
+                <span className="currency">€</span>
+              </div>
+
+              <div className="button-group">
+                <button 
+                  className="button button-primary"
+                  onClick={handleAddMoney}
+                  disabled={!inputAmount || parseFloat(inputAmount) <= 0}
+                >
+                  ✓ Uložiť
+                </button>
+                <button 
+                  className="button button-secondary"
+                  onClick={() => {
+                    setIsAdding(false)
+                    setInputAmount('')
+                  }}
+                >
+                  Zrušiť
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-
-      {savingsPercentage >= 80 && (
-        <div className="achievement">
-          🏆 Úspech: Super šetrič! Ušetril si viac ako 80%!
-        </div>
-      )}
     </div>
   )
 }

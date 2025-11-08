@@ -48,11 +48,18 @@ body {
 }
 
 .main-container {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   max-width: 1600px;
   margin: 0 auto;
+}
+
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 20px;
+  align-items: end;
 }
 
 .left-section,
@@ -61,6 +68,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.piggy-bank-section {
+  width: 100%;
 }
 
 .card {
@@ -150,7 +161,7 @@ body {
 }
 
 @media (max-width: 1200px) {
-  .main-container {
+  .top-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -154,7 +154,7 @@ const ChatBot = ({ receipts }: Props) => {
     <div className="card chatbot">
       <h2>
         <span>💬</span>
-        Finančný asistent AI
+        Finančný AI asistent
       </h2>
       
       <div className="messages-container">
