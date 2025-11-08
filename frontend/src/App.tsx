@@ -186,10 +186,6 @@ function App() {
     return (
       <div className="app">
         <header className="app-header">
-          <div className="logo-container">
-            <div className="logo-circle">SS</div>
-            <h1>Slovenská sporiteľňa</h1>
-          </div>
           <p className="subtitle">Načítavam...</p>
         </header>
         <div style={{ 

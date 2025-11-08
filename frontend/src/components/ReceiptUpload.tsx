@@ -302,11 +302,6 @@ const ReceiptUpload = ({ onReceiptUpload }: Props) => {
           </div>
         </>
       )}
-
-      <div className="upload-info">
-        <p>Podporované formáty: JPG, PNG, PDF</p>
-        <p>Alebo zadajte text účtenky manuálne</p>
-      </div>
     </div>
   )
 }

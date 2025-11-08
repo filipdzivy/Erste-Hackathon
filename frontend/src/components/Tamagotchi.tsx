@@ -96,7 +96,6 @@ const Tamagotchi: React.FC<TamagotchiProps> = ({
             className={`tamagotchi-sprite ${getFrameClass(spriteData.frames)}`}
           />
         </div>
-        <div className="tamagotchi-title">Tamagotchi</div>
       </div>
 
       <div className="tamagotchi-stats">
